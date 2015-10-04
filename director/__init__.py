@@ -32,7 +32,7 @@ print "Init sound"
 mixer.init()
 
 
-_cwd = os.path.dirname(os.path.realpath(__file__))
+#_cwd = os.path.dirname(os.path.realpath(__file__))
 
 _q_lock = threading.Semaphore()
 
@@ -150,9 +150,8 @@ def schedule(delay, callback, args):
 def play_sound(sound, delay=None):
     """
     Play the sound at the given file location.
-    File is relative to the director.py file the play_sound call is in
     """
-    sound = os.path.join(_cwd, sound)
+    #sound = os.path.join(_cwd, sound)
     if ( delay != None ):
         _create_timer(delay, play_sound, (sound))
     else:

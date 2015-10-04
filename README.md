@@ -1,8 +1,9 @@
 ### Usage
 
 #### Running
-At the pi prompt type
-`python main.py`
+To run hauntedpi
+
+`$ python main.py`
 
 #### Constants
 Update the constants.py file with the details of your inputs and outputs
@@ -82,11 +83,11 @@ Play the sound at the given file location.
 ## Raspberry Pi Tips
 
 #### Set mixer to auto output
-If there is no sound from your pi when playing a sound file
-Type the below at the command prompt on the pi.
+If there is no sound from your pi when playing a sound file.
+You can run the following command to set the audio output
 Last number can also be 1 to force headphones.
 
-`sudo amixer cset numid=3 0`
+`$ sudo amixer cset numid=3 0`
 
 
 
