@@ -1,5 +1,5 @@
-from constants import *
 import director
+from constants import *
 
 
 def play():

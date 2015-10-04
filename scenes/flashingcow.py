@@ -1,6 +1,5 @@
-from constants import *
 import director
-
+from constants import *
 
 def play():
 	director.play_sound("scene/audio/COW.ogg")

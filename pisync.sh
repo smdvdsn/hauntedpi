@@ -1,4 +1,4 @@
 #!/bin/bash
 echo Change detected...
-rsync -avz -e ssh src/ pi@mypi.local:haunt/src
+rsync -avz -e ssh ./ pi@mypi.local:haunt/
 echo Sync Success `date`

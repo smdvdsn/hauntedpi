@@ -10,7 +10,7 @@ def load_scenes():
     Load all py files in scene directory
     """
     print("Loading Scenes")
-    scenes = glob.glob(os.path.join(_cwd, "scene/*.py"))
+    scenes = glob.glob(os.path.join(_cwd, "scenes/*.py"))
 
     for file_path in scenes:
         print("loading scene %s" % file_path)
