@@ -12,3 +12,4 @@ class Sound:
 
 	def play(self):
 		print("Play sound")
+

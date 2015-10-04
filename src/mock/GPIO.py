@@ -19,7 +19,7 @@ def printFunc(vars, func):
 def setmode(mode):
 	printFunc(locals(), setmode)
 
-def setup(channel, in_out, initial=1, pull_up_down=1):
+def setup(channel, in_out, initial=1, pull_up_down=PUD_DOWN):
 	printFunc(locals(), setup)
 
 def input(channel):
@@ -28,17 +28,16 @@ def input(channel):
 def output(channel, state):
 	printFunc(locals(), output)
 
-def add_event_detect(channel, state, callback):
-	printFunc(locals(), add_event_detect)
-	detect[channel] = callback
-
-def cleanup():
-	printFunc(locals(), cleanup)
-
-
-def trigger(channel):
 	callback = detect.get(channel, None)
 	if ( callback != None ):
 		callback(channel)
-	else:
-		print("Channel %s not found in" % channel, detect.keys())
+
+def add_event_detect(channel, state, callback, bouncetime=0):
+	printFunc(locals(), add_event_detect)
+	detect[channel] = callback
+
+def remove_event_detect(channel):
+	detect.pop(channel, None)
+
+def cleanup():
+	printFunc(locals(), cleanup)
