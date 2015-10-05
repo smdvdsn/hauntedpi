@@ -1,5 +1,7 @@
 import os, sched, heapq, threading, logging
 
+logging.basicConfig(level=logging.INFO)
+
 # get the GPIO Library
 try:
     import RPi.GPIO as GPIO
@@ -47,7 +49,7 @@ def tick():
                 event = heapq.heappop(_events)
 
         if event != None:
-            logging.debug("Triggering event {} {}", event[0], event[1])
+            logging.debug("Triggering event %s %s", event[0], event[1])
             event[1](*event[2], **event[3])
         else:
             break
@@ -59,7 +61,7 @@ def _create_timer(delay, callback, args=[], kwargs={}):
     event = [(delay*1000)+_elapsed, callback, args, kwargs]
     with _q_lock:
         heapq.heappush(_events, event)
-    logging.info("Queue event for {}s - {} {}", delay, event[0], event[1])
+    logging.info("Queue event for %ss - %s %s", delay, event[0], event[1])
 
 def add_input(channel, pull_up_down=PUD_UP):
     """
@@ -147,16 +149,16 @@ def schedule(delay, callback, args):
     _create_timer(delay, callback, args)
 
 
-def play_sound(sound, delay=None):
+def play_sound(sound, delay=0, loops=0, maxtime=0, fade_ms=0):
     """
     Play the sound at the given file location.
     """
     #sound = os.path.join(_cwd, sound)
-    if ( delay != None ):
-        _create_timer(delay, play_sound, (sound))
+    if ( delay > 0 ):
+        _create_timer(delay, play_sound, (sound,loops,maxtime,fade_ms,))
     else:
-        logging.info("Playing sound %s", sound)
-        mixer.Sound(sound).play()
+        logging.info("Playing sound %s loops %s", sound, loops)
+        mixer.Sound(sound).play(loops=loops,maxtime=maxtime,fade_ms=fade_ms)
 
 def cleanup():
     print "Cleanup IO"
