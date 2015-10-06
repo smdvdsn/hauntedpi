@@ -9,4 +9,3 @@ def play():
 
 
 director.add_trigger(PUSH_BUTTON_1, play, ())
-director.schedule(5, play, ())

@@ -1,15 +1,21 @@
-#!/usr/bin/env python
+#!/usr/bin/python
 
-import os, glob, imp, sys, threading
+import signal, os, glob, imp, sys, threading, logging
 import director, constants
 
-_cwd = os.path.dirname(os.path.realpath(__file__))
+logging.basicConfig(level=logging.DEBUG)
 
 def load_scenes():
     """
     Load all py files in scene directory
     """
+    
+    print("Resetting Director")
+    director.reset()
+    reload(constants)
+
     print("Loading Scenes")
+    _cwd = os.path.dirname(os.path.realpath(__file__))
     scenes = glob.glob(os.path.join(_cwd, "scenes/*.py"))
 
     for file_path in scenes:
@@ -40,6 +46,11 @@ def process_keyboard():
 key_thread = threading.Thread(target=process_keyboard)
 key_thread.daemon = True
 key_thread.start()
+
+# handle SIGTERM
+def terminate(signum, frame):
+    raise KeyboardInterrupt()
+signal.signal(signal.SIGTERM, terminate)
 
 # Load the scenes
 load_scenes()

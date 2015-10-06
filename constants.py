@@ -4,7 +4,7 @@ from director import add_input, add_output, PUD_UP
 # Call them something that makes sense for the setup
 
 print "create inputs"
-PUSH_BUTTON_1 = add_input(3)
+PUSH_BUTTON_1 = add_input(8)
 PUSH_BUTTON_2 = add_input(7)
 
 print "create outputs"

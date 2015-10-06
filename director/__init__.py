@@ -1,19 +1,19 @@
 import os, sched, heapq, threading, logging
 
-logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # get the GPIO Library
 try:
     import RPi.GPIO as GPIO
 except ImportError:
-    logging.warn("!!! Using MOCK GPIO !!!")
+    logger.warn("!!! Using MOCK GPIO !!!")
     import mock.GPIO as GPIO
 
 # Mixer from pygame for sound
 try:
     from pygame import mixer, time
 except ImportError:
-    logging.warn("!!! Using MOCK GPIO !!!")
+    logger.warn("!!! Using MOCK GPIO !!!")
     from mock.pygame import mixer, time
 
 PUD_DOWN = GPIO.PUD_DOWN
@@ -27,16 +27,21 @@ _elapsed = 0
 
 _events = []
 
-print "Init IO"
-GPIO.setmode(GPIO.BCM)
+_q_lock = threading.RLock()
 
-print "Init sound"
-mixer.init()
+def init():
+    print "Init IO"
+    GPIO.setmode(GPIO.BCM)
+
+    print "Init sound"
+    mixer.init()
+
+init()
 
 
-#_cwd = os.path.dirname(os.path.realpath(__file__))
 
-_q_lock = threading.Semaphore()
+
+
 
 def tick():
     global _elapsed
@@ -44,14 +49,14 @@ def tick():
     # look for events to trigger
     while _events:
         event = None
+
         with _q_lock:
             if _events[0][0] < _elapsed:
                 event = heapq.heappop(_events)
+                logger.debug("Triggering event %s %s", event[0], event[1].__name__)
+                event[1](*event[2], **event[3])
 
-        if event != None:
-            logging.debug("Triggering event %s %s", event[0], event[1])
-            event[1](*event[2], **event[3])
-        else:
+        if event == None:
             break
 
     # tick clock 10 fps
@@ -61,7 +66,7 @@ def _create_timer(delay, callback, args=[], kwargs={}):
     event = [(delay*1000)+_elapsed, callback, args, kwargs]
     with _q_lock:
         heapq.heappush(_events, event)
-    logging.info("Queue event for %ss - %s %s", delay, event[0], event[1])
+    logger.debug("Queue event for %ss - %s %s", delay, event[0], event[1].__name__)
 
 def add_input(channel, pull_up_down=PUD_UP):
     """
@@ -71,6 +76,7 @@ def add_input(channel, pull_up_down=PUD_UP):
     e.g to define a constant for a push button on GPIO 5
     BUTTON_5 = director.add_input(5)
     """
+    logger.info("Configure input %d", channel)
     # Default to PUD_UP so switch connect to ground
     GPIO.setup(channel, GPIO.IN, pull_up_down=pull_up_down)
     return channel
@@ -87,7 +93,7 @@ def add_output(channel, initial=False):
     so the same call with default output HIGH would be
     RELAY_5 = director.add_output(5, True)
     """
-    logging.info("Configure output %d", channel)
+    logger.info("Configure output %d", channel)
     GPIO.setup(channel, GPIO.OUT, initial=initial)
     return channel
 
@@ -157,12 +163,17 @@ def play_sound(sound, delay=0, loops=0, maxtime=0, fade_ms=0):
     if ( delay > 0 ):
         _create_timer(delay, play_sound, (sound,loops,maxtime,fade_ms,))
     else:
-        logging.info("Playing sound %s loops %s", sound, loops)
+        logger.info("Playing sound %s loops %s", sound, loops)
         mixer.Sound(sound).play(loops=loops,maxtime=maxtime,fade_ms=fade_ms)
 
 def cleanup():
+    logger.info("Flush queue")
+    with _q_lock:
+        _events = []
     print "Cleanup IO"
     GPIO.cleanup() # cleanup all GPIO
     mixer.quit()
 
-
+def reset():
+    cleanup()
+    init()
