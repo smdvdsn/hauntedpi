@@ -133,7 +133,7 @@ def set_off(channel, delay=0, duration=None):
     """
     set_output(channel, False, delay, duration)
 
-def add_trigger(channel, callback, args, bouncetime=200, edge=RISING):
+def add_trigger(channel, callback, args, bouncetime=0.2, edge=RISING):
     """
     Call a function when an input GPIO is triggered
 
@@ -143,7 +143,7 @@ def add_trigger(channel, callback, args, bouncetime=200, edge=RISING):
     def trigger(channel):
         callback(*args)
     GPIO.remove_event_detect(channel)
-    GPIO.add_event_detect(channel, edge, callback=trigger, bouncetime=bouncetime)
+    GPIO.add_event_detect(channel, edge, callback=trigger, bouncetime=int(bouncetime*1000))
 
 def schedule(delay, callback, args):
     """
