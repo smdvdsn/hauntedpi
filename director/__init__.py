@@ -133,7 +133,7 @@ def set_off(channel, delay=0, duration=None):
     """
     set_output(channel, False, delay, duration)
 
-def add_trigger(channel, callback, args, bouncetime=0.2, edge=RISING):
+def add_trigger(channel, callback, args, bouncetime=0.2, edge=FALLING):
     """
     Call a function when an input GPIO is triggered
 
@@ -154,17 +154,22 @@ def schedule(delay, callback, args):
     """
     _create_timer(delay, callback, args)
 
-
-def play_sound(sound, delay=0, loops=0, maxtime=0, fade_ms=0):
+def play_sound(sound, delay=0, loops=0, maxtime=0, fade_ms=0, channel=None, volume=1):
     """
     Play the sound at the given file location.
     """
     #sound = os.path.join(_cwd, sound)
     if ( delay > 0 ):
-        _create_timer(delay, play_sound, (sound,loops,maxtime,fade_ms,))
+        _create_timer(delay, play_sound, (sound,0,loops,maxtime,fade_ms,))
     else:
         logger.info("Playing sound %s loops %s", sound, loops)
-        mixer.Sound(sound).play(loops=loops,maxtime=maxtime,fade_ms=fade_ms)
+        sChan = mixer.Sound(sound).play(loops=loops,maxtime=maxtime,fade_ms=fade_ms)
+        if channel == "left":
+            sChan.set_volume(volume,0)
+        elif channel == "right":
+            sChan.set_volume(0,volume)
+        else:
+            sChan.set_volume(volume)
 
 def cleanup():
     logger.info("Flush queue")

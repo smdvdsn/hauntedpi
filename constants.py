@@ -4,9 +4,12 @@ from director import add_input, add_output, PUD_UP
 # Call them something that makes sense for the setup
 
 print "create inputs"
-PUSH_BUTTON_1 = add_input(8)
-PUSH_BUTTON_2 = add_input(7)
+GRABBER_TRIGGER = add_input(12)
+TOXIC_TRIGGER = add_input(21)
+TOXIC_LIMIT_TRIGGER = add_input(16)
 
 print "create outputs"
-PROP_1_RELAY = add_output(16)
-PROP_2_RELAY = add_output(20)
+GRABBER_RELAY = add_output(26)
+TOXIC_HAMMER_RELAY = add_output(19)
+TOXIC_LIFT_RELAY = add_output(13)
+#PROP_2_RELAY = add_output(6)
