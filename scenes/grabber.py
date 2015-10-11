@@ -1,7 +1,7 @@
 import director, random
 from constants import *
 
-SOUND_CHANNEL = "right"
+SOUND_CHANNEL = "left"
 RUN_TIME = 12
 
 def play(loops):
