@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import signal, os, glob, imp, sys, threading, logging
-import director, constants
+import director
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -12,20 +12,22 @@ def load_scenes():
     
     print("Resetting Director")
     director.reset()
-    reload(constants)
 
-    print("Loading Scenes")
-    _cwd = os.path.dirname(os.path.realpath(__file__))
-    scenes = glob.glob(os.path.join(_cwd, "scenes/*.py"))
+    _cwd = os.path.dirname(os.path.realpath(__file__)) if len(sys.argv) < 2 else sys.argv[1]
+    print "Loading Scenes from ", _cwd
+    scenes = glob.glob(os.path.join(_cwd, "scene_*.py"))
+
+    # Lets also reload contstants
+    scenes.insert(0, os.path.join(_cwd, "constants.py"))
 
     for file_path in scenes:
         print("loading scene %s" % file_path)
         mod_name,file_ext = os.path.splitext(os.path.split(file_path)[-1])
         try:
-            del sys.modules["scene_" + mod_name]
+            del sys.modules[mod_name]
         except KeyError:
             pass
-        scene_mod = imp.load_source("scene_" + mod_name, file_path)
+        scene_mod = imp.load_source(mod_name, file_path)
 
 def process_keyboard():
     try:

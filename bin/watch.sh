@@ -1,2 +1,2 @@
 #!/bin/bash
-fswatch-run ../ ./pisync.sh
+fswatch-run ./ ./bin/pisync.sh

@@ -13,7 +13,7 @@ except ImportError:
 try:
     from pygame import mixer, time
 except ImportError:
-    logger.warn("!!! Using MOCK GPIO !!!")
+    logger.warn("!!! Using MOCK PYGAME !!!")
     from mock.pygame import mixer, time
 
 PUD_DOWN = GPIO.PUD_DOWN
@@ -53,14 +53,14 @@ def tick():
         with _q_lock:
             if _events[0][0] < _elapsed:
                 event = heapq.heappop(_events)
-                logger.debug("Triggering event %s %s", event[0], event[1].__name__)
+                logger.debug("Triggering event %s %s %s", event[0], event[1].__name__, event[2])
                 event[1](*event[2], **event[3])
 
         if event == None:
             break
 
     # tick clock 10 fps
-    _elapsed += _clock.tick(60)
+    _elapsed += _clock.tick(120)
 
 def _create_timer(delay, callback, args=[], kwargs={}):
     event = [(delay*1000)+_elapsed, callback, args, kwargs]
@@ -154,6 +154,9 @@ def schedule(delay, callback, args):
     """
     _create_timer(delay, callback, args)
 
+def load_sound(sound):
+    return mixer.Sound(sound)
+
 def play_sound(sound, delay=0, loops=0, maxtime=0, fade_ms=0, channel=None, volume=1):
     """
     Play the sound at the given file location.
@@ -162,14 +165,20 @@ def play_sound(sound, delay=0, loops=0, maxtime=0, fade_ms=0, channel=None, volu
     if ( delay > 0 ):
         _create_timer(delay, play_sound, (sound,0,loops,maxtime,fade_ms,))
     else:
-        logger.info("Playing sound %s loops %s", sound, loops)
-        sChan = mixer.Sound(sound).play(loops=loops,maxtime=maxtime,fade_ms=fade_ms)
+        logger.info("Playing sound %s loops %s maxtime %s", sound, loops, maxtime)
+        if not isinstance(sound, mixer.Sound):
+            sound = mixer.Sound(sound)
+
+        sChan = sound.play(loops=loops,fade_ms=fade_ms)
         if channel == "left":
             sChan.set_volume(volume,0)
         elif channel == "right":
             sChan.set_volume(0,volume)
         else:
             sChan.set_volume(volume)
+
+        if maxtime > 0:
+            _create_timer(maxtime, sound.stop, ())
 
 def cleanup():
     logger.info("Flush queue")

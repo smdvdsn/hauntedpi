@@ -7,8 +7,12 @@ class Clock:
 
 	def tick(self, fps=0):
 		now = time.time()
-		self.d = (now - self.t) if self.t > 0 else 0
+		last = self.t if self.t > 0 else now
+		self.d = now - last
 		self.t = now
+
+		if fps > 0 and self.d < (1000/fps):
+			time.sleep(((1000/fps) - self.d) / 1000)
 
 		return self.get_time()
 

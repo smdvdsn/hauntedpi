@@ -82,6 +82,13 @@ Play the sound at the given file location.
 
 ## Raspberry Pi Tips
 
+#### Update rasbian
+`$ sudo apt-get update`
+`$ sudo apt-get upgrade`
+
+#### Install pygame
+`$ sudo apt-get install python-pygame`
+
 #### Set mixer to auto output
 If there is no sound from your pi when playing a sound file.
 You can run the following command to set the audio output
