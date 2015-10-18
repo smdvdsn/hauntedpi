@@ -8,25 +8,29 @@ def reset():
 	director.set_off(GREEN_LIGHT_RELAY)
 	director.set_off(RED_LIGHT_RELAY)
 
+	director.add_trigger(PIR_TRIGGER, enter, (), bouncetime=2)
+	director.add_trigger(CHAIR_TRIGGER, play, (), bouncetime=2)
+
 def enter():
 	director.play_sound("scenes/p2/audio/take_a_seat.ogg")
 	director.set_off(WELCOME_SIGN_RELAY, 2)
+	director.remove_trigger(PIR_TRIGGER)
 
 def play():
 	switch_sound = director.load_sound("scenes/p2/audio/switch.ogg")
 
 	# Siren
-	director.set_on(SIREN_RELAY, 0, 10)
+	director.set_on(SIREN_RELAY, 0, 13)
 	director.play_sound("scenes/p2/audio/siren.ogg")
 
 	# Green light and hum sound effect
 	director.play_sound(switch_sound, 5)
-	director.set_on(GREEN_LIGHT_RELAY, 5.5)
+	director.set_on(GREEN_LIGHT_RELAY, 5.5, 7.5)
 	director.play_sound("scenes/p2/audio/switch_hum.ogg", 5, loops=-1, maxtime=4)
 	
 	# Red light
 	director.play_sound(switch_sound, 6)
-	director.set_on(RED_LIGHT_RELAY, 6.5)
+	director.set_on(RED_LIGHT_RELAY, 6.5, 6.5)
 	
 	# fire the chair
 	director.set_on(CHAIR_VIBRATE_RELAY, 6.8, 5)
@@ -53,11 +57,11 @@ def play():
 	# Reset
 	director.schedule(20, reset, ())
 
+	director.remove_trigger(CHAIR_TRIGGER)
+
 
 # init triggers etc
 print('Load the chair')
-director.add_trigger(PIR_TRIGGER, enter, (), bouncetime=2)
-director.add_trigger(CHAIR_TRIGGER, play, (), bouncetime=2)
 director.add_trigger(RESET_TRIGGER, reset, (), bouncetime=2)
 
 reset()

@@ -145,6 +145,13 @@ def add_trigger(channel, callback, args, bouncetime=0.2, edge=FALLING):
     GPIO.remove_event_detect(channel)
     GPIO.add_event_detect(channel, edge, callback=trigger, bouncetime=int(bouncetime*1000))
 
+def remove_trigger(channel):
+    """
+    Remove trigger function
+    """
+    GPIO.remove_event_detect(channel)
+
+
 def schedule(delay, callback, args):
     """
     Schedules a function to be called after the defined delay in seconds
