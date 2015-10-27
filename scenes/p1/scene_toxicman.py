@@ -4,17 +4,21 @@ from constants import *
 SOUND_CHANNEL = "right"
 RUN_TIME = 10
 
+
+hammer_sound = director.load_sound("scenes/p1/audio/toxic_hammer.ogg")
+
 def play():
 	# TOXIC_HAMMER_RELAY
 	# TOXIC_LIFT_RELAY
 	director.play_sound("scenes/p1/audio/toxic_trigger.ogg", delay=1, channel=SOUND_CHANNEL)
-	director.set_on(TOXIC_LIFT_RELAY)
+	director.set_on(TOXIC_LIFT_RELAY, 0, 15)
 
 def limit_switch():
-	director.set_off(TOXIC_LIFT_RELAY, 0)
+	director.set_off(TOXIC_LIFT_RELAY)
 
 # Setup a hammer to play at random intervals
 def hammer_time():
+	director.play_sound(hammer_sound, channel=SOUND_CHANNEL);
 	director.set_on(TOXIC_HAMMER_RELAY, 0, random.randrange(2000, 5000)/1000)
 	director.schedule(random.randrange(20, 120), hammer_time, ())
 

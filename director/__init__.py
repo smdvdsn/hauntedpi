@@ -170,7 +170,7 @@ def play_sound(sound, delay=0, loops=0, maxtime=0, fade_ms=0, channel=None, volu
     """
     #sound = os.path.join(_cwd, sound)
     if ( delay > 0 ):
-        _create_timer(delay, play_sound, (sound,0,loops,maxtime,fade_ms,))
+        _create_timer(delay, play_sound, (sound,0,loops,maxtime,fade_ms,channel,volume,))
     else:
         logger.info("Playing sound %s loops %s maxtime %s", sound, loops, maxtime)
         if not isinstance(sound, mixer.Sound):

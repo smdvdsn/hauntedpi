@@ -4,11 +4,12 @@ from director import add_input, add_output, PUD_UP
 # Call them something that makes sense for the setup
 
 print "create inputs"
-DOOR_TRIGGER = add_input(17)		# Photo beam at feet level
+DOOR_TRIGGER = add_input(22)		# Photo beam at feet level
 CHAIR_TRIGGER = add_input(27)		# Limit switch on the chair seat
 PROXIMITY_TRIGGER = add_input(17)	# PIR trigger welcome sound
+FOG_TRIGGER = add_input(23)			# Trigger a blast of fog
 
-RESET_TRIGGER = add_input(22)		# External button outside room can reset before normal timeout
+RESET_TRIGGER = add_input(18)		# External button outside room can reset before normal timeout
 
 
 print "create outputs"
