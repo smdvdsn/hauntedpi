@@ -20,7 +20,7 @@ def reset():
 	director.play_sound(ghost_story_sound, loops=-1, channel=INSIDE_CHANNEL)
 
 def welcome():
-	director.play_sound("scenes/p2/audio/take_a_seat.ogg", channel=OUTSIDE_CHANNEL)
+	director.play_sound("scenes/p2/audio/welcome.ogg", channel=OUTSIDE_CHANNEL)
 
 def enter():
 	# Stop the idle sounds

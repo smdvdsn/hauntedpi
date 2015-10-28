@@ -10,7 +10,7 @@ hammer_sound = director.load_sound("scenes/p1/audio/toxic_hammer.ogg")
 def play():
 	# TOXIC_HAMMER_RELAY
 	# TOXIC_LIFT_RELAY
-	director.play_sound("scenes/p1/audio/toxic_trigger.ogg", delay=1, channel=SOUND_CHANNEL)
+	director.play_sound("scenes/p1/audio/toxic_trigger.ogg", loops=3, channel=SOUND_CHANNEL)
 	director.set_on(TOXIC_LIFT_RELAY, 0, 15)
 
 def limit_switch():

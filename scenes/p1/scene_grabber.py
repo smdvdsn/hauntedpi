@@ -14,7 +14,7 @@ def play():
 # Setup a sound to play at random intervals
 def background_sound():
 	sounds = ("scenes/p1/audio/grave_yard_owl.ogg", "scenes/p1/audio/grave_yard_crickets.ogg", "scenes/p1/audio/grave_yard_crow.ogg",)
-	director.play_sound(random.choice(sounds), channel=SOUND_CHANNEL)
+	director.play_sound(random.choice(sounds), volume=0.5, channel=SOUND_CHANNEL)
 
 	director.schedule(random.randrange(7, 20), background_sound, ())
 
