@@ -36,6 +36,9 @@ def play():
 
 	# Siren
 	director.set_on(SIREN_RELAY, 0, 13)
+	director.set_on(CLAXON_RELAY, 0, 0.5)
+	director.set_on(CLAXON_RELAY, 1, 0.5)
+	director.set_on(CLAXON_RELAY, 2, 0.5)
 	director.play_sound("scenes/p2/audio/siren.ogg", channel=INSIDE_CHANNEL)
 
 	# Green light and hum sound effect
@@ -74,7 +77,7 @@ def play():
 	director.play_sound(switch_sound, 12.5, channel=INSIDE_CHANNEL)
 
 	# Reset
-	director.schedule(20, reset, ())
+	director.schedule(120, reset, ())
 
 	director.remove_trigger(CHAIR_TRIGGER)
 
